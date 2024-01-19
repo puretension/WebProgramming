@@ -1,0 +1,71 @@
+<html> 
+<head> 
+</head> 
+<body>
+<div id="root"></div> <!-- 리액트가 렌더링할 때 사용할 DOM 요소 -->
+<script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>  
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+<!--<script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>-->
+<!--<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>-->
+<script>
+  'use strict';
+
+//   //대강 이렇게 되있겟지? 라 생각하는 사고방식이 중요하다.
+//   React = {
+//     useState(value){
+//         const setValue = (newValue) => {
+//             value = newValue;
+//         };
+//         return [value, setValue];   
+//     }
+//   }
+
+    //클래스는 잘 사용하지 않는다. -> 함수형 컴포넌트를 사용한다.(코드가 간결해지고 메모리 자원을 덜 사용한다.)
+    //따로 render 메소드를 구현할 필요가 없다.(return만 하면 된다!!)
+    function LikeButton() {  //함수형 컴포넌트 X 함수 컴포넌트 O
+        // [] vs {} -> []는 배열, {}는 객체
+        const [liked, setLiked] = React.useState(false); //구조분해, state를 사용할 때는 useState를 사용한다⭐️
+        // const {Liked, SetLiked} = React.useState(false); 
+
+        // 뭔짓을 하던, return 화면인건 불변임
+        if (liked) {
+            return 'You liked this.';
+        }
+        return (
+            <button onClick={() => {setLiked(false); }}>Like</button>
+        );
+    }
+
+  const e = React.createElement; //JSX를 사용하지 않고 React 요소를 생성할 때 사용하는 함수
+
+
+
+  //데이터와 화면을 하나로 묶은 것을 Component라고 한다.
+  class LikeButton extends React.Component {
+    // props는 컴포넌트가 사용되는 과정에서 부모 컴포넌트가 설정하는 속성값으로, 
+    // 컴포넌트 자신은 해당 props를 읽기 전용으로만 사용할 수 있다.
+    constructor(props) {
+      super(props);
+      this.state = {liked: false}; //화면 바뀌는 부분은 state로 관리
+    }
+
+    //컴포넌트가 렌더링될 때 호출되는 메소드
+    render() {
+      if (this.state.liked) {
+        return 'You liked this.';
+      }
+
+    //버튼을 클릭하면 setState를 통해 state를 변경
+    // return e('button', {onclick: () => this.setState({liked: true})}, 'Like');
+    //JSX를 사용하면 위의 코드를 아래와 같이 간단하게 작성할 수 있다.
+    //addeventlistener를 사용하지 않고 onClick 속성을 사용하여 이벤트를 설정
+    //바벨이 JSX를 createElement 호출로 변환
+    return e('button', {onClick: () => this.setState({liked: true})}, 'Like')
+    }
+  }
+</script>
+<script>
+  ReactDOM.render(e(LikeButton), document.querySelector('#root'));  //LikeButton 컴포넌트를 렌더링
+</script>
+</body>
+</html>

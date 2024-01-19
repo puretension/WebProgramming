@@ -1,0 +1,57 @@
+<html>
+<head>
+</head>
+<body>
+<div id="root"></div>
+<script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+<script src="https://unpkg.com/babel-standalone@18/babel.min.js"></script> //babel이 차이점
+<!--<script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>-->
+<!--<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>-->
+<script type="text/babel">
+  'use strict';
+
+  //리엑트에서 컴포넌트는 대문자, html 태그는 소문자로 시작
+  class LikeButton extends React.Component {
+    // constructor(props) {
+    //   super(props);
+    //   this.state = {liked: false};
+    // }
+
+    // 1. babel이 constructor를 대신 생성해줌
+    state = {liked: false}; //babel이 constructor를 대신 생성해줌
+
+
+    //2. babel이 arrow function으로 바꿔줌
+    onClick = () => {
+      this.setState({liked: true});
+    }
+
+    //3. babel이 render()를 대신 생성해줌
+    render() {
+      if (this.state.liked) {
+        return 'You liked this.';
+      }
+
+      //const array = [1, 2, 3]; //배열도 객체!
+      //pop, push, shift, unshift, splice -> 배열을 직접적으로 수정
+      //concat, slice -> 배열을 수정하지 않고 새로운 배열을 생성
+
+      //react에서는 state를 직접 수정하면 안된다. -> 불변성 유지  
+      //react에서는 화면이 바뀌는 부분은 state로 관리
+      return (
+        <button onClick={() =>
+          // this.state.liked = true; ❌, 객체를 함부로 바꾸지 말자(리액트가 state가 바뀌었는지 감지를 못함), 복사하라(불변성)
+          this.setState({liked: true})}> 
+          Like
+        </button>
+      );
+    }
+  }
+</script>
+<script type="text/babel">
+  // ReactDOM.render(<LikeButton/>, document.querySelector('#root')) //17버전 이하
+  ReactDOM.createRoot(document.querySelector('#root')).render(<LikeButton/>); //18버전 이상
+</script>
+</body>
+</html>

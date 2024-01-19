@@ -1,0 +1,65 @@
+<html>
+<head>
+    <meta charset="UTF-8"/> <!-- 문서의 문자 인코딩은 UTF-8-->
+    <title>구구단</title> <!-- 문서 제목 -->
+</head> <!-- 문서의 머리말 -->
+<body> <!-- 문서의 본문 -->
+<div id="root"></div> <!-- React 렌더링할 때 사용할 DOM 요소 -->
+<!-- React와 ReactDOM 라이브러리를 CDN을 통해 불러온다.  React Component 만들고 렌더링 할 때 사용한다.-->
+<script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+<script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+<!--babel 호출(JSX와 같은 최신 JS 문법을 브라우저에서 실행 가능한 코드로 변환해줌) -->
+<script type="text/babel">
+  'use strict'; //엄격 모드
+  //구구단 함수형 컴포넌트 정의!
+  const GuGuDan = () => {
+    //React의 useState 훅을 사용하여 상태 관리⭐️
+    //[a,b] -> a는 상태, b는 상태를 바꾸는 함수⭐️
+    const [first, setFirst] = React.useState(Math.ceil(Math.random() * 9)); //Math.ceil() -> 올림
+    const [second, setSecond] = React.useState(Math.ceil(Math.random() * 9)); 
+    const [value, setValue] = React.useState(''); // user가 입력한 값
+    const [result, setResult] = React.useState(''); // 결과값
+    const inputEl = React.useRef(null); //useRef() -> DOM에 직접 접근할 때 사용, ref를 사용하면 DOM 요소에도 접근 가능
+
+    //useEffect() -> 컴포넌트가 렌더링 될 때마다 특정 작업을 수행하도록 설정
+    const onSubmitForm = (e) => { //e -> 이벤트 객체
+      e.preventDefault(); // 폼 제출 시 페이지 리로드 방지
+      if (parseInt(value) === first * second) {  
+        setResult('정답');
+        setFirst(Math.ceil(Math.random() * 9));
+        setSecond(Math.ceil(Math.random() * 9));
+        setValue('');
+        inputEl.current.focus(); //입력 창에 포커스
+      } else {
+        setResult('땡');
+        setValue('');
+        inputEl.current.focus();
+      }
+    };
+    // 컴포넌트가 렌더링할 JSX -> HTML과 비슷한 문법을 사용하여 UI를 묘사
+    return (
+        //React.Fragment -> 여러 요소를 하나의 요소로 묶어줌. -> 불필요한 div 태그를 사용하지 않아도 됨.
+      <React.Fragment> 
+        <div>{first} 곱하기 {second}는?</div> 
+        <form onSubmit={onSubmitForm}> 
+          <input
+            ref={inputEl}
+            type="number"
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
+          />
+          <button>입력!</button>
+        </form>
+        <div id="result">{result}</div>
+      </React.Fragment>
+    );
+  };
+
+</script> <!-- JSX를 사용하려면 script 태그의 type을 text/babel로 설정해야 함. -->
+<script type="text/babel"> //JSX를 사용하지 않고 React 요소를 생성할 때 사용하는 함수
+  ReactDOM.render(<GuGuDan/>, document.querySelector('#root')); //React 요소를 렌더링
+</script> 
+</body>
+</html>
