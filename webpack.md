@@ -85,3 +85,11 @@ npm i -D babel-loader -> 바벨과 webpack연결
 ```
 
 ## 6. npx webpack, npx webpack serve => 서버확인
+
+```
+npm run dev
+npx webpack
+npx webpack serve
+```
+
+### Chrome에서 http://localhost:8080/index.html

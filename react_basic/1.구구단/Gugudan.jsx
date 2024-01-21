@@ -40,4 +40,4 @@ const GuGuDan = () => {
   );
 };
 
-module.exports = GuGuDan;
+module.exports = GuGuDan; // 이렇게 해야 인식함
