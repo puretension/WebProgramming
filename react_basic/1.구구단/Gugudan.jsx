@@ -2,11 +2,12 @@ const React = require('react');
 const { useState, useRef } = React;
 
 const GuGuDan = () => {
+    //state 선언(hooks)
   const [first, setFirst] = useState(Math.ceil(Math.random() * 9));
   const [second, setSecond] = useState(Math.ceil(Math.random() * 9));
   const [value, setValue] = useState('');
   const [result, setResult] = useState('');
-  const inputEl = useRef(null);
+  const inputRef = useRef(null); //ref 사용 방법 
 
   const onSubmitForm = (e) => {
     e.preventDefault();
@@ -15,11 +16,11 @@ const GuGuDan = () => {
       setFirst(Math.ceil(Math.random() * 9));
       setSecond(Math.ceil(Math.random() * 9));
       setValue('');
-      inputEl.current.focus();
+      inputRef.current.focus();
     } else {
       setResult('땡');
       setValue('');
-      inputEl.current.focus();
+      inputRef.current.focus(); //current로 접근
     }
   };
   return (
@@ -27,7 +28,7 @@ const GuGuDan = () => {
       <div>{first} 곱하기 {second}는?</div>
       <form onSubmit={onSubmitForm}>
         <input
-          ref={inputEl}
+          ref={inputRef}
           type="number"
           value={value}
           onChange={(e) => setValue(e.target.value)}
