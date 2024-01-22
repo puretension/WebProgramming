@@ -13,7 +13,9 @@ import { createRoot } from 'react-dom/client';
 // import RSP from './RSP.jsx';
 import RSP from './RSP.jsx';
 
-const container = document.querySelector('#root');
-const root = createRoot(container);
-// root.render(<RSP />);
-root.render(<RSP/>);
+ReactDOM.createRoot(document.querySelector('#root')).render(<RSP />);   
+
+// const container = document.querySelector('#root');
+// const root = createRoot(container);
+// // root.render(<RSP />);
+// root.render(<RSP/>);

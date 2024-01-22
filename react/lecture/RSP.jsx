@@ -1,5 +1,5 @@
 import React, {useState, useRef, useEffect, memo} from 'react';  //✅
-
+import useInterval  from './useInterval'; // custom hook ✅
  //✅
 const rspCoords = {
     '바위': '0',
@@ -27,18 +27,20 @@ const RSP = () => {
     const [result, setResult] = useState('');
     const [imgCoord, setImgCoord] = useState(rspCoords.바위); // 초기값은 바위
     const [score, setScore] = useState(0);
-    const interval = useRef();
+    const [isRunning, setIsRunning] = useState(true); //true면 실행, false면 멈춤
 
-    // didmount + didupdate 역할(1대1 대응은 아님),Hooks의 lifecycle ✅
-    useEffect(() => {
-        console.log('다시 실행'); //콘솔에서 확인
-        interval.current = setInterval(changeHand, 100);
-        return () => {
-            console.log('종료');
-            clearInterval(interval.current);
-        }
-    }, [imgCoord]); // imgCoord가 바뀔때마다 useEffect가 실행된다.
-    //[imgCoord]자리에 []를 넣으면 componentDidMount만 실행된다(처음에만 바뀌고 이후로는 X)
+    // const interval = useRef();
+
+    // // Hooks의 lifecycle ✅
+    // useEffect(() => { // didmount + didupdate 역할(1대1 대응은 아님),
+    //     console.log('다시 실행'); //콘솔에서 확인
+    //     interval.current = setInterval(changeHand, 100);
+    //     return () => { // componentWillUnmount 역할
+    //         console.log('종료');
+    //         clearInterval(interval.current);
+    //     }
+    // }, [imgCoord]); // imgCoord가 바뀔때마다 useEffect가 실행된다.
+    // //[imgCoord]자리에 []를 넣으면 componentDidMount만 실행된다(처음에만 바뀌고 이후로는 X)
 
 
     const changeHand = () => {
@@ -49,6 +51,34 @@ const RSP = () => {
         } else if(imgCoord === rspCoords.보){
             setImgCoord(rspCoords.바위);
         }
+    };
+
+    useInterval(changeHand, isRunning ? 100 : null); // custom hook
+
+       //✅
+       const onClickBtn = (choice) => () => {
+        if (isRunning) {
+            // clearInterval(interval.current);
+            // interval.current = null;
+            setIsRunning(false); // 멈춤
+            const myScore = scores[choice];
+            const cpuScore = scores[computerChoice(imgCoord)];
+            const diff = myScore - cpuScore;
+
+        if(diff === 0){
+            setResult('비겼습니다!');
+        } else if([-1,2].includes(diff)){
+            setResult('이겼습니다!');
+            setScore((prevScore) => prevScore + 1);
+        }else {
+            setResult('졌습니다!');``
+            setScore((prevScore) => prevScore - 1);
+        }
+        setTimeout(() => {
+            // isRunning = setInterval(changeHand, 100); // 2초정도 결과확인
+            setIsRunning(true); // 다시 실행
+        }, 1000);
+    }
     };
 
     // const onClickBtn = (choice) =>{
@@ -74,29 +104,29 @@ const RSP = () => {
     //      } 
     // }
 
-     //✅
-    const onClickBtn = (choice) => () => {
-        if (interval.current) {
-            clearInterval(interval.current);
-            interval.current = null;
-            const myScore = scores[choice];
-            const cpuScore = scores[computerChoice(imgCoord)];
-            const diff = myScore - cpuScore;
+    //  //✅
+    // const onClickBtn = (choice) => () => {
+    //     if (interval.current) {
+    //         clearInterval(interval.current);
+    //         interval.current = null;
+    //         const myScore = scores[choice];
+    //         const cpuScore = scores[computerChoice(imgCoord)];
+    //         const diff = myScore - cpuScore;
 
-        if(diff === 0){
-            setResult('비겼습니다!');
-        } else if([-1,2].includes(diff)){
-            setResult('이겼습니다!');
-            setScore((prevScore) => prevScore + 1);
-        }else {
-            setResult('졌습니다!');``
-            setScore((prevScore) => prevScore - 1);
-        }
-        setTimeout(() => {
-            interval.current = setInterval(changeHand, 100); // 2초정도 결과확인
-        }, 1000);
-    }
-    };
+    //     if(diff === 0){
+    //         setResult('비겼습니다!');
+    //     } else if([-1,2].includes(diff)){
+    //         setResult('이겼습니다!');
+    //         setScore((prevScore) => prevScore + 1);
+    //     }else {
+    //         setResult('졌습니다!');``
+    //         setScore((prevScore) => prevScore - 1);
+    //     }
+    //     setTimeout(() => {
+    //         interval.current = setInterval(changeHand, 100); // 2초정도 결과확인
+    //     }, 1000);
+    // }
+    // };
 
  //✅
     return (
