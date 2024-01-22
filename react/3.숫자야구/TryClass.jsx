@@ -1,6 +1,11 @@
-import React, { Component } from 'react';
+import React, { PureComponent, memo, useState } from 'react';
 
-class TryClass extends Component {
+class TryClass extends PureComponent {
+  state = {
+    result: this.props.result,
+    try: this.props.try,
+  };
+
   render() {
     const { tryInfo } = this.props;
     return (

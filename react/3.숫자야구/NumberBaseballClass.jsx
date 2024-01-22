@@ -1,4 +1,4 @@
-import React, { Component, createRef } from 'react';
+import React, { Component, createRef } from 'react'; // 이렇게 하자
 import TryClass from './TryClass';
 
 function getNumbers() { // 숫자 네 개를 겹치지 않고 랜덤하게 뽑는 함수
@@ -24,6 +24,11 @@ state = {
     value: '',
     answer: getNumbers(), // ex: [1,3,5,7]
     tries: [], // push 쓰면 안 돼요
+}
+
+// A -> B -> C -> D, 에서 A-> D로 바로 갈 수 있게 해주는 context API, props drilling을 막아줌
+shouldComponentUpdate(nextProps, nextState, nextContext){
+
 }
 
 onSubmitForm = (e) => {
@@ -86,8 +91,15 @@ onSubmitForm = (e) => {
 
   inputRef = createRef(); // this.inputRef
 
+  //  inputRef;
+  //  oninputRef = (c) => { this.inputRef = c; };
+  //  아래에서 ref = {this.onInputRef}로 사용햇었으나 
+  //  위와 같이 inputRef = createRef();로 사용할 수 있음, createRef()는 import 필수
+  // onInputRef = (c) => { console.log(); this.inputRef = c; };
+
   render() {
     const { result, value, tries } = this.state; // 비구조화 할당(this.state.result를 result로)
+    // setState를 하면 render()가 다시 실행되므로, render() 안에 setState를 넣으면 무한 반복
     return (
       <>
         <h1>{result}</h1>
