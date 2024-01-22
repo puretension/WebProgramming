@@ -1,10 +1,10 @@
-// const React = require('react');
-// const ReactDom = require('react-dom');
 import React from 'react';
-import ReactDom from 'react-dom';
+import { createRoot } from 'react-dom/client';
+// import NumberBaseballClass from './NumberBaseballClass';
+import RenderTest from './RenderTest';
 
-import NumberBaseball from './NumberBaseball';
+const container = document.querySelector('#root');
+const root = createRoot(container);
+// root.render(<NumberBaseballClass />);
 
-const Hot = hot(NumberBaseball); // hot을 씌우면 실시간으로 반영됨
-
-ReactDom.render(<Hot />, document.querySelector('#root'));
+root.render(<RenderTest />);
